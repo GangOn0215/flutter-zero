@@ -1,4 +1,4 @@
-import 'package:a02_ui_practice/screens/Home/Home.dart';
+import 'package:a02_ui_practice/screens/Home/widgets/KakaoCard.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -10,14 +10,14 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       home: Scaffold(
-        backgroundColor: Color(0XFF2B2730),
+        backgroundColor: const Color(0XFF2B2730),
         body: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Column(
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 80,
               ),
               Row(
@@ -26,28 +26,28 @@ class MyApp extends StatelessWidget {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Text(
+                      const Text(
                         'Coxe',
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: 18,
                             fontWeight: FontWeight.w600),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 15,
                       ),
                       Container(
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           color: Colors.grey,
                           borderRadius: BorderRadius.all(
                             Radius.circular(5),
                           ),
                         ),
-                        padding: EdgeInsets.symmetric(
+                        padding: const EdgeInsets.symmetric(
                           horizontal: 4,
                           vertical: 4,
                         ),
-                        child: Text('내 계좌'),
+                        child: const Text('내 계좌'),
                       ),
                     ],
                   ),
@@ -62,17 +62,17 @@ class MyApp extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 40,
               ),
-              KakaoCard(
+              const KakaoCard(
                 bgColor: Colors.amber,
                 title: 'Coxe의 통장',
                 amonut: '297,000',
                 icon: Icons.apple_outlined,
                 isKakao: true,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               KakaoCard(
@@ -82,7 +82,7 @@ class MyApp extends StatelessWidget {
                 icon: Icons.date_range_outlined,
                 isKakao: true,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               KakaoCard(
