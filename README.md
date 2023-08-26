@@ -19,6 +19,6 @@
 
 
 - 2023/08/26
-    - #4.0 Sate, #4.1 setState [📌]
-    - #4.3 BuildContext [📌]
-    - #4.4 Widget Lifecycle [📌]
+    - #4.0 Sate, #4.1 setState [📌](https://github.com/GangOn0215/flutter-zero/tree/c7b561f35f0aff8075463c160df16c48667ffb6d/a03_stateful)
+    - #4.3 BuildContext [📌](https://github.com/GangOn0215/flutter-zero/tree/c7b561f35f0aff8075463c160df16c48667ffb6d/a03_build_context)
+    - #4.4 Widget Lifecycle [📌](https://github.com/GangOn0215/flutter-zero/tree/c7b561f35f0aff8075463c160df16c48667ffb6d/a03_lifecycle)
