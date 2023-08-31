@@ -10,14 +10,29 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int totalSeconds = 1500;
+  final int initSeconds = 2;
+  late int totalSeconds;
   bool isRunning = false;
   late Timer time;
+  int pomodoro = 0;
+
+  @override
+  void initState() {
+    super.initState();
+
+    totalSeconds = initSeconds;
+  }
 
   void tick(Timer time) {
     setState(() {
       totalSeconds--;
     });
+
+    if (totalSeconds < 0) {
+      onReset();
+
+      pomodoro++;
+    }
   }
 
   void onStartPress() {
@@ -34,6 +49,15 @@ class _HomeScreenState extends State<HomeScreen> {
   void onPausePress() {
     setState(() {
       isRunning = false;
+    });
+
+    time.cancel();
+  }
+
+  void onReset() {
+    setState(() {
+      isRunning = false;
+      totalSeconds = initSeconds;
     });
 
     time.cancel();
@@ -84,15 +108,30 @@ class _HomeScreenState extends State<HomeScreen> {
             flex: 2,
             child: Container(
               alignment: Alignment.center,
-              child: IconButton(
-                onPressed: isRunning ? onPausePress : onStartPress,
-                icon: Icon(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  IconButton(
+                    onPressed: isRunning ? onPausePress : onStartPress,
+                    icon: Icon(
+                      isRunning
+                          ? Icons.pause_circle_outline_outlined
+                          : Icons.play_circle_outline_rounded,
+                      color: Theme.of(context).cardColor,
+                      size: 90,
+                    ),
+                  ),
                   isRunning
-                      ? Icons.pause_circle_outline_outlined
-                      : Icons.play_circle_outline_rounded,
-                  color: Theme.of(context).cardColor,
-                  size: 90,
-                ),
+                      ? IconButton(
+                          onPressed: onReset,
+                          iconSize: 40,
+                          icon: Icon(
+                            Icons.restore,
+                            color: Theme.of(context).cardColor,
+                          ),
+                        )
+                      : const Text(''),
+                ],
               ),
             ),
           ),
@@ -105,13 +144,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   top: Radius.circular(30),
                 ),
               ),
-              child: const Row(
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
+                      const Text(
                         'Pomodoro',
                         style: TextStyle(
                           fontSize: 24,
@@ -119,8 +158,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                       Text(
-                        '0',
-                        style: TextStyle(
+                        '$pomodoro',
+                        style: const TextStyle(
                           fontSize: 48,
                           fontWeight: FontWeight.w600,
                         ),
