@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -10,15 +9,18 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int totalSeconds = 0;
+  int totalMillisec = 0;
+  int lastSectionIdx = 0;
   bool isRunning = false;
   bool isInit = false;
   late Timer timer;
-  List<int> timerHistory = [];
+  List<int> timerHistory = []; // totalMilliSec 기록
+  List<String> timeHistorySection = []; // 구간
+  List<String> timeHistroyTexts = []; // 전체 시간 기록
 
   void tick(Timer timer) {
     setState(() {
-      totalSeconds++;
+      totalMillisec++;
     });
   }
 
@@ -32,7 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void onStart() {
     timer = Timer.periodic(
-      const Duration(seconds: 1),
+      const Duration(milliseconds: 10),
       tick,
     );
 
@@ -54,7 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
       isRunning = false;
       isInit = false;
 
-      totalSeconds = 0;
+      totalMillisec = 0;
     });
 
     timer.cancel();
@@ -62,15 +64,35 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void recodeHistory() {
     setState(() {
-      timerHistory.add(totalSeconds);
+      timerHistory.insert(0, totalMillisec);
+
+      String tempCurrentTime = setTimes();
+      timeHistroyTexts.insert(0, tempCurrentTime);
+      timeHistorySection.insert(0, (++lastSectionIdx).toString());
     });
+  }
+
+  String setTimes() {
+    int millisec = totalMillisec % 100;
+    double convertSec = totalMillisec / 100;
+    int sec = (convertSec % 60).toInt();
+    int min = convertSec ~/ 60;
+
+    String sMin = min >= 10 ? "$min" : "0$min";
+    String sSec = sec >= 10 ? "$sec" : "0$sec";
+    String sMillsec = millisec >= 10 ? "$millisec" : "0$millisec";
+
+    return '$sMin : $sSec . $sMillsec';
   }
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
+
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 80),
+        padding: const EdgeInsets.symmetric(horizontal: 40),
         child: Column(
           children: [
             Flexible(
@@ -79,19 +101,118 @@ class _HomeScreenState extends State<HomeScreen> {
                 alignment: Alignment.bottomCenter,
                 child: Text(
                   // '00:00:00',
-                  "$totalSeconds",
+                  setTimes(),
                   style: TextStyle(
-                    fontSize: 80,
-                    color: Theme.of(context).cardColor,
-                  ),
+                      fontSize: 40,
+                      color: Theme.of(context).cardColor,
+                      fontWeight: FontWeight.bold),
                 ),
               ),
             ),
-            const Flexible(
+            Flexible(
               flex: 2,
               child: Column(
                 children: [
-                  Row(),
+                  const SizedBox(
+                    height: 40,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        width: width * 0.13,
+                        child: const Text(
+                          '구간',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: width * 0.25,
+                        child: const Text(
+                          '구간 기록',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: width * 0.25,
+                        child: const Text(
+                          '전체 시간',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Expanded(
+                    child: ListView(
+                      children: [
+                        for (num i = 0; i < timeHistroyTexts.length; i++)
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Padding(
+                                padding: EdgeInsets.symmetric(
+                                  vertical: 20,
+                                ),
+                              ),
+                              SizedBox(
+                                width: width * 0.12,
+                                child: Text(
+                                  timeHistorySection[i.toInt()].toString(),
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                width: width * 0.25,
+                                child: const Text(
+                                  "00:00.00",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                width: width * 0.25,
+                                child: Text(
+                                  timeHistroyTexts[i.toInt()],
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 60,
+                  ),
                 ],
               ),
             ),
