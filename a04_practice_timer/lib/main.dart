@@ -1,4 +1,4 @@
-import 'package:a04_practice_timer/screens/home_screen.dart';
+import 'package:a04_practice_timer/screens/home/home.dart';
 import 'package:flutter/material.dart';
 
 void main() {
